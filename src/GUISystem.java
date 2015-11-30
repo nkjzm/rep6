@@ -1,6 +1,14 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StreamTokenizer;
 import java.util.*;
+import java.util.List;
 
 /**
  * Javaによる簡単な計算機
@@ -89,6 +97,12 @@ class GUISystemFrame extends Frame implements ActionListener, KeyListener
 
 		commandPanel.addKeyListener(this);
 		commandPanel.requestFocus();
+		
+		ArrayList<String> ifs = new ArrayList<String>();
+		ifs.add("a");
+		ifs.add("b");
+		Rule test_rule = new Rule("test",ifs,"test");
+		addRule("AnimalWorld.data",test_rule);
 	}
 
 
@@ -324,5 +338,94 @@ class GUISystemFrame extends Frame implements ActionListener, KeyListener
 		}
 	}
 
+	private void addRule(String filename,Rule r){
+		List<Rule> rules = readRules(filename);
+		rules.add(r);
+		writeRules(filename,rules);
+	}
+	
+    private List<Rule> readRules(String theFileName){
+        String line;
+		 List<Rule> rules = new ArrayList<Rule>();
+        try{
+            int token;
+            FileReader f = new FileReader(theFileName);
+            StreamTokenizer st = new StreamTokenizer(f);
+            while((token = st.nextToken())!= StreamTokenizer.TT_EOF){
+                switch(token){
+                    case StreamTokenizer.TT_WORD:
+                        String name = null;
+                        ArrayList<String> antecedents = null;
+                        String consequent = null;
+                        if("rule".equals(st.sval)){
+			    st.nextToken();
+//                            if(st.nextToken() == '"'){
+                                name = st.sval;
+                                st.nextToken();
+                                if("if".equals(st.sval)){
+                                    antecedents = new ArrayList<String>();
+                                    st.nextToken();
+                                    while(!"then".equals(st.sval)){
+                                        antecedents.add(st.sval);
+                                        st.nextToken();
+                                    }
+                                    if("then".equals(st.sval)){
+                                        st.nextToken();
+                                        consequent = st.sval;
+                                    }
+                                }
+//                            } 
+                        }
+			// ルールの生成
+                        rules.add(new Rule(name,antecedents,consequent));
+                        break;
+                    default:
+                        System.out.println(token);
+                        break;
+                }
+            }
+        } catch(Exception e){
+            System.out.println(e);
+        }
+        return rules;
+    }
+	
+	public void writeRules(String fileName,List<Rule> data){
+
+		try{
+			File file = new File(fileName);
+
+			if (checkBeforeWritefile(file)){
+				PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+
+				for(Rule d : data){
+					pw.println("rule\t\""+d.name+"\"");
+					Boolean first = true;
+					for(String s : d.antecedents){
+						pw.println((first?"if":"")+"\t\""+s+"\"");
+						first = false;
+					}
+					pw.println("then\t\""+d.consequent+"\"\n");
+				}
+
+				pw.close();
+			}else{
+				System.out.println("ファイルに書き込めません");
+			}
+		}catch(IOException e){
+			System.out.println(e);
+		}
+	}
+
+	private static boolean checkBeforeWritefile(File file){
+		if (file.exists()){
+			if (file.isFile() && file.canWrite()){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	
 }
 
