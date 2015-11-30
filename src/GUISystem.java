@@ -101,8 +101,10 @@ class GUISystemFrame extends Frame implements ActionListener, KeyListener
 		ArrayList<String> ifs = new ArrayList<String>();
 		ifs.add("a");
 		ifs.add("b");
-		Rule test_rule = new Rule("test",ifs,"test");
+		Rule test_rule = new Rule("test111",ifs,"test");
 		addRule("AnimalWorld.data",test_rule);
+		
+		deletRule("AnimalWorld.data","test111");
 	}
 
 
@@ -341,6 +343,17 @@ class GUISystemFrame extends Frame implements ActionListener, KeyListener
 	private void addRule(String filename,Rule r){
 		List<Rule> rules = readRules(filename);
 		rules.add(r);
+		writeRules(filename,rules);
+	}
+	
+	private void deletRule(String filename,String name){
+		List<Rule> rules = readRules(filename);
+		for(Rule r: rules){
+			if(r.name.equals(name)){
+				rules.remove(r);
+				break;
+			}
+		}
 		writeRules(filename,rules);
 	}
 	
