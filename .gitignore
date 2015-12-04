@@ -1,13 +1,10 @@
 
-va
+#Java 
 *.class
 *.jar
 *.war
 *.ear
 
-# Eclipse
-.classpath
-.settings
 
 # Idea
 .idea
