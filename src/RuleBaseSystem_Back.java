@@ -26,7 +26,7 @@ public class RuleBaseSystem_Back {
     }
 
     
-class RuleBase implements Serializable{
+class RuleBase_Back implements Serializable{
     String fileName;
     ArrayList<String> wm;
     ArrayList<Rule> rules;
@@ -213,7 +213,7 @@ class RuleBase implements Serializable{
     }
 }
 
-class FileManager {
+class FileManager_Back {
     FileReader f;
     StreamTokenizer st;
     public ArrayList<Rule> loadRules(String theFileName){
@@ -288,7 +288,7 @@ class FileManager {
 /**
  * ルールを表すクラス．
  */
-class Rule implements Serializable{
+class Rule_Back implements Serializable{
     String name;
     ArrayList<String> antecedents;
     String consequent;
