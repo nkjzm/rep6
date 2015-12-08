@@ -2,16 +2,16 @@ import java.util.*;
 import java.io.*;
 
 public class RuleBaseSystem_Back {
-    static RuleBase rb;
-    static FileManager fm;
+    static RuleBase_Back rb;
+    static FileManager_Back fm;
     public static void main(String args[]){
 
-	    fm = new FileManager();
-	    ArrayList<Rule> rules = fm.loadRules("CarShop.data");
+	    fm = new FileManager_Back();
+	    ArrayList<Rule_Back> rules = fm.loadRules("CarShop.data");
 	    //ArrayList rules = fm.loadRules("AnimalWorld.data");
 	    ArrayList<String> wm    = fm.loadWm("CarShopWm.data");
 	    //ArrayList wm    = fm.loadWm("AnimalWorldWm.data");
-	    rb = new RuleBase(rules,wm);
+	    rb = new RuleBase_Back(rules,wm);
 	    ArrayList<String> queries = new ArrayList<String>();
 	    Scanner scan = new Scanner(System.in);
 	    while(true){
@@ -29,9 +29,9 @@ public class RuleBaseSystem_Back {
 class RuleBase_Back implements Serializable{
     String fileName;
     ArrayList<String> wm;
-    ArrayList<Rule> rules;
+    ArrayList<Rule_Back> rules;
     
-    RuleBase_Back(ArrayList<Rule> theRules,ArrayList<String> theWm){
+    RuleBase_Back(ArrayList<Rule_Back> theRules,ArrayList<String> theWm){
 	wm = theWm;
 	rules = theRules;
     }
@@ -40,7 +40,7 @@ class RuleBase_Back implements Serializable{
 	wm = theWm;
     }
 
-    public void setRules(ArrayList<Rule> theRules){
+    public void setRules(ArrayList<Rule_Back> theRules){
 	rules = theRules;
     }
 
@@ -148,10 +148,10 @@ class RuleBase_Back implements Serializable{
       if(cPoint < wm.size() + rules.size()){
 	// Ruleと Unify してみる．
  	for(int i = cPoint ; i < rules.size() ; i++){
- 	    Rule aRule = rename((Rule)rules.get(i));
+ 	    Rule_Back aRule = rename((Rule_Back)rules.get(i));
 	    // 元のバインディングを取っておく．
 	    HashMap<String,String> orgBinding = new HashMap<String,String>();
-	    for(Iterator<String> itr = theBinding.keySet().iterator(); itr.hasNext();){
+	for(Iterator<String>itr = theBinding.keySet().iterator(); itr.hasNext();){
 		String key = itr.next();
 		String value = theBinding.get(key);
 		orgBinding.put(key,value);
@@ -186,8 +186,8 @@ class RuleBase_Back implements Serializable{
      * @return  変数がリネームされたルールのコピーを返す．
      */
     int uniqueNum = 0;
-    private Rule rename(Rule theRule){
-	Rule newRule = theRule.getRenamedRule(uniqueNum);
+    private Rule_Back rename(Rule_Back theRule){
+	Rule_Back newRule = theRule.getRenamedRule(uniqueNum);
 	uniqueNum = uniqueNum + 1;
 	return newRule;
     }
@@ -216,8 +216,8 @@ class RuleBase_Back implements Serializable{
 class FileManager_Back {
     FileReader f;
     StreamTokenizer st;
-    public ArrayList<Rule> loadRules(String theFileName){
-	ArrayList<Rule> rules = new ArrayList<Rule>();
+    public ArrayList<Rule_Back> loadRules(String theFileName){
+	ArrayList<Rule_Back> rules = new ArrayList<Rule_Back>();
 	String line;
 	try{
 	    int token;
@@ -247,7 +247,7 @@ class FileManager_Back {
 			    }
 			}
 			rules.add(
-			    new Rule(name,antecedents,consequent));
+			    new Rule_Back(name,antecedents,consequent));
 			break;
 		    default:
 			System.out.println(token);
@@ -299,7 +299,7 @@ class Rule_Back implements Serializable{
 	this.consequent = theConsequent;
     }
 
-    public Rule getRenamedRule(int uniqueNum){
+    public Rule_Back getRenamedRule(int uniqueNum){
 	ArrayList<String> vars = new ArrayList<String>();
 	for(int i = 0 ; i < antecedents.size() ; i++){
 	    String antecedent = (String)this.antecedents.get(i);
@@ -318,7 +318,7 @@ class Rule_Back implements Serializable{
 	String newConsequent = renameVars(consequent,
 					  renamedVarsTable);
 
-	Rule newRule = new Rule(name,newAntecedents,newConsequent);
+	Rule_Back newRule = new Rule_Back(name,newAntecedents,newConsequent);
 	return newRule;
     }
 
