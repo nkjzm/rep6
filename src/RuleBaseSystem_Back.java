@@ -31,7 +31,7 @@ class RuleBase_Back implements Serializable{
     ArrayList<String> wm;
     ArrayList<Rule> rules;
     
-    RuleBase(ArrayList<Rule> theRules,ArrayList<String> theWm){
+    RuleBase_Back(ArrayList<Rule> theRules,ArrayList<String> theWm){
 	wm = theWm;
 	rules = theRules;
     }
@@ -293,7 +293,7 @@ class Rule_Back implements Serializable{
     ArrayList<String> antecedents;
     String consequent;
 
-    Rule(String theName,ArrayList<String> theAntecedents,String theConsequent){
+    Rule_Back(String theName,ArrayList<String> theAntecedents,String theConsequent){
 	this.name = theName;
 	this.antecedents = theAntecedents;
 	this.consequent = theConsequent;
